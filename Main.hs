@@ -20,6 +20,8 @@ data Organism = Organism {
 }
     deriving (Show, Eq)
 
+type Population = [Organism]
+
 
 make_matrix = matrix num_signals num_objects
 
@@ -58,3 +60,20 @@ payoff a b = (sum success_matrix) / 2
 
         -- Probability of X succesfully communicating "i" to Y with signal "j"
         comm x y i j = (send_matrix x ! (i,j)) * (hear_matrix y ! (j,i))
+
+
+-- The average payoff for a population
+avg_payoff :: Population -> Rational
+avg_payoff pop = sum payoffs / weight
+    where
+        -- List of all payoffs
+        payoffs = fmap (uncurry payoff) organisms
+
+        -- List of all permuations of two organisms
+        organisms = fmap (\(x,y) -> (pop !! x, pop !! y)) indices
+
+        -- List of all permutations of two indices in the population
+        indices = [(x,y) | x <- [0 .. length pop - 1], y <- [0 .. length pop - 1], x /= y]
+
+        -- Total weight to divide by
+        weight = realToFrac $ (length pop) * (length pop - 1)
