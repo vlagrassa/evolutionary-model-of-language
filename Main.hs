@@ -3,11 +3,11 @@ import Data.Matrix
 
 
 -- The number of signals
--- n = 5
+-- In the paper, this is denoted with n
 num_signals = 5
 
 -- The number of messages
--- m = 5
+-- In the paper, this is denoted with m
 num_objects = 5
 
 data Organism = Organism {
