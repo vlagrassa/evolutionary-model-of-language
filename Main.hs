@@ -2,6 +2,14 @@ import System.Environment
 import Data.Matrix
 
 
+type Association = Integer
+type AssociationMatrix = Matrix Association
+
+assocToRational :: Association -> Rational
+-- assocToRational = id
+assocToRational = realToFrac
+
+
 -- The number of signals
 -- In the paper, this is denoted with n
 num_signals = 5
@@ -13,7 +21,7 @@ num_objects = 5
 data Organism = Organism {
 
     -- Association matrix of signals and objects
-    association :: Matrix Rational,
+    association :: AssociationMatrix,
 
     -- Payoff for correct communication about some object
     comm_payoff :: [Rational]
@@ -35,7 +43,8 @@ send_matrix :: Organism -> Matrix Rational
 send_matrix organism = mapIndex normalizeRow a
     where
         a = association organism
-        normalizeRow i _ n = n / sum (getRow i a)
+        normalizeRow :: Int -> Int -> Association -> Rational
+        normalizeRow i _ n = (assocToRational n) / (assocToRational . sum . getRow i $ a)
 
 -- In the paper, this is denoted with Q
 -- Probability of interpreting signal j as refering to object i
@@ -43,7 +52,8 @@ hear_matrix :: Organism -> Matrix Rational
 hear_matrix organism = mapIndex normalizeCol a
     where
         a = association organism
-        normalizeCol _ j n = n / sum (getCol j a)
+        normalizeCol :: Int -> Int -> Association -> Rational
+        normalizeCol _ j n = (assocToRational n) / (assocToRational . sum . getCol j $ a)
 
 
 -- In the paper, this is denoted with F
@@ -59,7 +69,8 @@ payoff a b = (sum success_matrix) / 2
         btoa j i = (comm_payoff b !! (j-1)) * (comm b a j i)
 
         -- Probability of X succesfully communicating "i" to Y with signal "j"
-        comm x y i j = (send_matrix x ! (i,j)) * (hear_matrix y ! (j,i))
+        comm :: Organism -> Organism -> Int -> Int -> Rational
+        comm x y i j = toRational $ (send_matrix x ! (i,j)) * (hear_matrix y ! (j,i))
 
 
 -- The average payoff for a population
