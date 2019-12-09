@@ -53,8 +53,8 @@ payoff a b = (sum success_matrix) / 2
         success_matrix = make_matrix $ \(i,j) -> (atob i j) + (btoa j i)
 
         -- Probability of A succesfully communicating with B, and vice versa
-        atob i j = (comm_payoff a !! i) * (comm a b i j)
-        btoa j i = (comm_payoff b !! j) * (comm b a j i)
+        atob i j = (comm_payoff a !! (i-1)) * (comm a b i j)
+        btoa j i = (comm_payoff b !! (j-1)) * (comm b a j i)
 
         -- Probability of X succesfully communicating "i" to Y with signal "j"
         comm x y i j = (send_matrix x ! (i,j)) * (hear_matrix y ! (j,i))
