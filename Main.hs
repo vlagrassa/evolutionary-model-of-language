@@ -17,6 +17,7 @@ mapIndex f m = matrix (nrows m) (ncols m) $ \(i,j) -> f i j (m ! (i,j))
 
 
 -- In the paper, this is denoted with P
+-- Probability of using signal j for object i
 send_matrix :: Organism -> Matrix Rational
 send_matrix organism = mapIndex normalizeRow a
     where
@@ -24,6 +25,7 @@ send_matrix organism = mapIndex normalizeRow a
         normalizeRow i _ n = n / sum (getRow i a)
 
 -- In the paper, this is denoted with Q
+-- Probability of interpreting signal j as refering to object i
 hear_matrix :: Organism -> Matrix Rational
 hear_matrix organism = mapIndex normalizeCol a
     where
@@ -32,6 +34,7 @@ hear_matrix organism = mapIndex normalizeCol a
 
 
 -- In the paper, this is denoted with F
+-- Payoff for communicating
 payoff :: Organism -> Organism -> Rational
 payoff a b = (sum success_matrix) / 2
     where
