@@ -1,6 +1,15 @@
 import System.Environment
 import Data.Matrix
 
+
+-- The number of signals
+-- n = 5
+num_signals = 5
+
+-- The number of messages
+-- m = 5
+num_objects = 5
+
 data Organism = Organism {
 
     -- Association matrix of signals and objects
@@ -11,6 +20,8 @@ data Organism = Organism {
 }
     deriving (Show, Eq)
 
+
+make_matrix = matrix num_signals num_objects
 
 mapIndex :: (Int -> Int -> a -> b) -> Matrix a -> Matrix b
 mapIndex f m = matrix (nrows m) (ncols m) $ \(i,j) -> f i j (m ! (i,j))
@@ -39,7 +50,7 @@ payoff :: Organism -> Organism -> Rational
 payoff a b = (sum success_matrix) / 2
     where
         -- Probability of either organism succesfully communicating "i" to the other with "j"
-        success_matrix = matrix 3 3 $ \(i,j) -> (atob i j) + (btoa j i)
+        success_matrix = make_matrix $ \(i,j) -> (atob i j) + (btoa j i)
 
         -- Probability of A succesfully communicating with B, and vice versa
         atob i j = (comm_payoff a !! i) * (comm a b i j)
