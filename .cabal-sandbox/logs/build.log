@@ -1,0 +1,86 @@
+
+package: Final-0.1.0.0
+os: windows
+arch: x86_64
+compiler: ghc-8.4.3
+client: cabal-install-2.2.0.0
+dependencies: base-4.11.1.0
+install-outcome: BuildFailed
+docs-outcome: NotTried
+tests-outcome: NotTried
+
+package: Final-0.1.0.0
+os: windows
+arch: x86_64
+compiler: ghc-8.4.3
+client: cabal-install-2.2.0.0
+dependencies: base-4.11.1.0
+install-outcome: InstallOk
+docs-outcome: NotTried
+tests-outcome: NotTried
+
+package: loop-0.3.0
+os: windows
+arch: x86_64
+compiler: ghc-8.4.3
+client: cabal-install-2.2.0.0
+dependencies: base-4.11.1.0
+install-outcome: InstallOk
+docs-outcome: NotTried
+tests-outcome: NotTried
+
+package: matrix-0.3.6.1
+os: windows
+arch: x86_64
+compiler: ghc-8.4.3
+client: cabal-install-2.2.0.0
+dependencies: base-4.11.1.0 deepseq-1.4.3.0 loop-0.3.0
+              primitive-0.6.4.0 semigroups-0.18.5 vector-0.12.0.1
+install-outcome: InstallOk
+docs-outcome: NotTried
+tests-outcome: NotTried
+
+package: primitive-0.6.4.0
+os: windows
+arch: x86_64
+compiler: ghc-8.4.3
+client: cabal-install-2.2.0.0
+dependencies: base-4.11.1.0 ghc-prim-0.5.2.0 transformers-0.5.5.0
+install-outcome: InstallOk
+docs-outcome: NotTried
+tests-outcome: NotTried
+
+package: semigroups-0.18.5
+os: windows
+arch: x86_64
+compiler: ghc-8.4.3
+client: cabal-install-2.2.0.0
+flags: binary bytestring -bytestring-builder containers deepseq
+       hashable tagged text transformers unordered-containers
+dependencies: base-4.11.1.0
+install-outcome: InstallOk
+docs-outcome: NotTried
+tests-outcome: NotTried
+
+package: vector-0.12.0.1
+os: windows
+arch: x86_64
+compiler: ghc-8.4.3
+client: cabal-install-2.2.0.0
+flags: boundschecks -internalchecks -unsafechecks -wall
+dependencies: base-4.11.1.0 deepseq-1.4.3.0 ghc-prim-0.5.2.0
+              primitive-0.6.4.0
+install-outcome: InstallOk
+docs-outcome: NotTried
+tests-outcome: NotTried
+
+package: matrix-0.3.6.1
+os: windows
+arch: x86_64
+compiler: ghc-8.4.3
+client: cabal-install-2.2.0.0
+dependencies: base-4.11.1.0 deepseq-1.4.3.0 loop-0.3.0
+              primitive-0.6.4.0 semigroups-0.18.5 vector-0.12.0.1
+install-outcome: InstallOk
+docs-outcome: NotTried
+tests-outcome: NotTried

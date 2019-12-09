@@ -1,0 +1,4 @@
+Installing executable Final in C:\Users\Vince\UChicago\Year 2 Quarter 1\LING 26040-1\Final\.cabal-sandbox\bin
+ Compiling Main             ( Main.hs, dist\dist-sandbox-26b905db\build\Final\Final-tmp\Main.o )
+Linking dist/dist-sandbox-26b905db\build\Final\Final.exe ...
+cabal: Leaving directory '.'

@@ -1,0 +1,84 @@
+Installing library in C:\Users\Vince\UChicago\Year 2 Quarter 1\LING 26040-1\Final\.cabal-sandbox\x86_64-windows-ghc-8.4.3\matrix-0.3.6.1-17S993xH0CXChtCujsqHN5
+db\build\Data\Matrix.o )
+
+Data\Matrix.hs:79:1: warning: [-Wunused-imports]
+    The import of `Data.Monoid' is redundant
+      except perhaps to import instances from `Data.Monoid'
+    To import instances alone, use: import Data.Monoid()
+   |
+79 | import Data.Monoid
+   | ^^^^^^^^^^^^^^^^^^
+
+Data\Matrix.hs:81:1: warning: [-Wunused-imports]
+    The import of `Data.Traversable' is redundant
+      except perhaps to import instances from `Data.Traversable'
+    To import instances alone, use: import Data.Traversable()
+   |
+81 | import Data.Traversable
+   | ^^^^^^^^^^^^^^^^^^^^^^^
+
+Data\Matrix.hs:1364:1: warning: [-Winline-rule-shadowing]
+    Rule "matrix/traceOfSum" may never fire
+      because `trace' might inline first
+    Probable fix: add an INLINE[n] or NOINLINE[n] pragma for `trace'
+     |
+1364 | "matrix/traceOfSum"
+     | ^^^^^^^^^^^^^^^^^^^...
+
+Data\Matrix.hs:1364:1: warning: [-Winline-rule-shadowing]
+    Rule "matrix/traceOfSum" may never fire
+      because rule "Class op +" for `+' might fire first
+    Probable fix: add phase [n] or [~n] to the competing rule
+     |
+1364 | "matrix/traceOfSum"
+     | ^^^^^^^^^^^^^^^^^^^...
+
+Data\Matrix.hs:1367:1: warning: [-Winline-rule-shadowing]
+    Rule "matrix/traceOfScale" may never fire
+      because `trace' might inline first
+    Probable fix: add an INLINE[n] or NOINLINE[n] pragma for `trace'
+     |
+1367 | "matrix/traceOfScale"
+     | ^^^^^^^^^^^^^^^^^^^^^...
+
+Data\Matrix.hs:1367:1: warning: [-Winline-rule-shadowing]
+    Rule "matrix/traceOfScale" may never fire
+      because `scaleMatrix' might inline first
+    Probable fix: add an INLINE[n] or NOINLINE[n] pragma for `scaleMatrix'
+     |
+1367 | "matrix/traceOfScale"
+     | ^^^^^^^^^^^^^^^^^^^^^...
+
+Data\Matrix.hs:1392:1: warning: [-Winline-rule-shadowing]
+    Rule "matrix/detLaplaceProduct" may never fire
+      because `detLaplace' might inline first
+    Probable fix: add an INLINE[n] or NOINLINE[n] pragma for `detLaplace'
+     |
+1392 | "matrix/detLaplaceProduct"
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^...
+
+Data\Matrix.hs:1392:1: warning: [-Winline-rule-shadowing]
+    Rule "matrix/detLaplaceProduct" may never fire
+      because rule "Class op *" for `*' might fire first
+    Probable fix: add phase [n] or [~n] to the competing rule
+     |
+1392 | "matrix/detLaplaceProduct"
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^...
+
+Data\Matrix.hs:1395:1: warning: [-Winline-rule-shadowing]
+    Rule "matrix/detLUProduct" may never fire
+      because `detLU' might inline first
+    Probable fix: add an INLINE[n] or NOINLINE[n] pragma for `detLU'
+     |
+1395 | "matrix/detLUProduct"
+     | ^^^^^^^^^^^^^^^^^^^^^...
+
+Data\Matrix.hs:1395:1: warning: [-Winline-rule-shadowing]
+    Rule "matrix/detLUProduct" may never fire
+      because rule "Class op *" for `*' might fire first
+    Probable fix: add phase [n] or [~n] to the competing rule
+     |
+1395 | "matrix/detLUProduct"
+     | ^^^^^^^^^^^^^^^^^^^^^...
+ignoring (possibly broken) abi-depends field for packages
+cabal: Leaving directory 'C:\Users\Vince\AppData\Local\Temp\cabal-tmp-44596\matrix-0.3.6.1'

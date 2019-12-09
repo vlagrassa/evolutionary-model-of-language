@@ -1,0 +1,18 @@
+Installing library in C:\Users\Vince\UChicago\Year 2 Quarter 1\LING 26040-1\Final\.cabal-sandbox\x86_64-windows-ghc-8.4.3\primitive-0.6.4.0-39Pwmm1zkQX6bM7xFUT3Jc
+dist\dist-sandbox-26b905db\build\Control\Monad\Primitive.o )
+[ 2 of 15] Compiling Data.Primitive.Internal.Compat ( Data\Primitive\Internal\Compat.hs, dist\dist-sandbox-26b905db\build\Data\Primitive\Internal\Compat.o )
+[ 3 of 15] Compiling Data.Primitive.Array ( Data\Primitive\Array.hs, dist\dist-sandbox-26b905db\build\Data\Primitive\Array.o )
+[ 4 of 15] Compiling Data.Primitive.MVar ( Data\Primitive\MVar.hs, dist\dist-sandbox-26b905db\build\Data\Primitive\MVar.o )
+[ 5 of 15] Compiling Data.Primitive.MachDeps ( Data\Primitive\MachDeps.hs, dist\dist-sandbox-26b905db\build\Data\Primitive\MachDeps.o )
+[ 6 of 15] Compiling Data.Primitive.Internal.Operations ( Data\Primitive\Internal\Operations.hs, dist\dist-sandbox-26b905db\build\Data\Primitive\Internal\Operations.o )
+[ 7 of 15] Compiling Data.Primitive.MutVar ( Data\Primitive\MutVar.hs, dist\dist-sandbox-26b905db\build\Data\Primitive\MutVar.o )
+[ 8 of 15] Compiling Data.Primitive.SmallArray ( Data\Primitive\SmallArray.hs, dist\dist-sandbox-26b905db\build\Data\Primitive\SmallArray.o )
+[ 9 of 15] Compiling Data.Primitive.Types ( Data\Primitive\Types.hs, dist\dist-sandbox-26b905db\build\Data\Primitive\Types.o )
+[10 of 15] Compiling Data.Primitive.ByteArray ( Data\Primitive\ByteArray.hs, dist\dist-sandbox-26b905db\build\Data\Primitive\ByteArray.o )
+[11 of 15] Compiling Data.Primitive.PrimArray ( Data\Primitive\PrimArray.hs, dist\dist-sandbox-26b905db\build\Data\Primitive\PrimArray.o )
+[12 of 15] Compiling Data.Primitive.Ptr ( Data\Primitive\Ptr.hs, dist\dist-sandbox-26b905db\build\Data\Primitive\Ptr.o )
+[13 of 15] Compiling Data.Primitive.Addr ( Data\Primitive\Addr.hs, dist\dist-sandbox-26b905db\build\Data\Primitive\Addr.o )
+[14 of 15] Compiling Data.Primitive.UnliftedArray ( Data\Primitive\UnliftedArray.hs, dist\dist-sandbox-26b905db\build\Data\Primitive\UnliftedArray.o )
+[15 of 15] Compiling Data.Primitive   ( Data\Primitive.hs, dist\dist-sandbox-26b905db\build\Data\Primitive.o )
+ignoring (possibly broken) abi-depends field for packages
+cabal: Leaving directory 'C:\Users\Vince\AppData\Local\Temp\cabal-tmp-12285\primitive-0.6.4.0'
