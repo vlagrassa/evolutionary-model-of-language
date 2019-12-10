@@ -88,5 +88,5 @@ avg_payoff_org pop i = sum payoffs / (realToFrac $ length pop - 1)
 
 
 avg_payoff_arr :: Population -> [Rational]
-avg_payoff_arr = fmap (avg_payoff_org pop) [0 .. length pop - 1]
+avg_payoff_arr pop = fmap (avg_payoff_org pop) [0 .. length pop - 1]
 -- (flip fmap) [0 .. length pop - 1] . avg_payoff_org
