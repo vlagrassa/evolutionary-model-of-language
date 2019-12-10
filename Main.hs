@@ -1,6 +1,7 @@
 import System.Environment
 import Data.Matrix
 import System.Random
+import Data.List
 
 import Organism
 import Vars
@@ -90,3 +91,16 @@ avg_payoff_org pop i = sum payoffs / (realToFrac $ length pop - 1)
 avg_payoff_arr :: Population -> [Rational]
 avg_payoff_arr pop = fmap (avg_payoff_org pop) [0 .. length pop - 1]
 -- (flip fmap) [0 .. length pop - 1] . avg_payoff_org
+
+
+-- A list of all the unique association matrices in the population
+association_list :: Population -> [AssociationMatrix]
+association_list = nub . fmap association
+
+
+-- Frequency of individuals with a given association matrix in a given population
+freq_association :: AssociationMatrix -> Population -> Rational
+freq_association a pop = (num_matches a pop) / (realToFrac $ length pop)
+    where
+        num_matches a = sum . fmap (\x -> if association x == a then 1 else 0)
+
