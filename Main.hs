@@ -13,12 +13,12 @@ type Population = [Organism]
 -- In the paper, this is denoted with P
 -- Probability of using signal j for object i
 send_matrix :: Organism -> Matrix Rational
-send_matrix = normalizeRows . fmap assocToRational . association
+send_matrix = normalizeRows . fmap assocToRational . getOrgMatrix
 
 -- In the paper, this is denoted with Q
 -- Probability of interpreting signal j as refering to object i
 hear_matrix :: Organism -> Matrix Rational
-hear_matrix = normalizeCols . fmap assocToRational . association
+hear_matrix = normalizeCols . fmap assocToRational . getOrgMatrix
 
 
 -- In the paper, this is denoted with F (Adapts equations 4 and 8)
