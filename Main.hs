@@ -3,31 +3,11 @@ import Data.Matrix
 import System.Random
 
 import Organism
+import Vars
+import Utils
 
-
--- Matrix of similarities between different signals
-simil_matrix = matrix num_signals num_signals $
-    \(i,j) -> (realToFrac 1) / (realToFrac . (+) 1 . abs $ i - j)
-
--- Probabilities of confusing one signal for another
--- Normalized version of similarity matrix
-error_matrix = normalizeRows simil_matrix
 
 type Population = [Organism]
-
-
-mapIndex :: (Int -> Int -> a -> b) -> Matrix a -> Matrix b
-mapIndex f m = matrix (nrows m) (ncols m) $ \(i,j) -> f i j (m ! (i,j))
-
-normalizeRows :: Fractional a => Matrix a -> Matrix a
-normalizeRows m = mapIndex normalizeRow m
-    where
-        normalizeRow i _ n = n / (sum . getRow i $ m)
-
-normalizeCols :: Fractional a => Matrix a -> Matrix a
-normalizeCols m = mapIndex normalizeCol m
-    where
-        normalizeCol _ j n = n / (sum . getCol j $ m)
 
 
 -- In the paper, this is denoted with P
