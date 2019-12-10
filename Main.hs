@@ -8,6 +8,7 @@ type AssociationMatrix = Matrix Association
 assocToRational :: Association -> Rational
 -- assocToRational = id
 assocToRational = realToFrac
+assocToFractional  = fromRational . assocToRational
 
 
 -- The number of signals
@@ -18,11 +19,13 @@ num_signals = 5
 -- In the paper, this is denoted with m
 num_objects = 5
 
+-- Matrix of similarities between different signals
 simil_matrix = matrix num_signals num_signals $
     \(i,j) -> (realToFrac 1) / (realToFrac . (+) 1 . abs $ i - j)
 
-error_matrix = matrix num_signals num_signals $
-    \(i,j) -> (simil_matrix ! (i,j)) / (sum . getRow i $ simil_matrix)
+-- Probabilities of confusing one signal for another
+-- Normalized version of similarity matrix
+error_matrix = normalizeRows simil_matrix
 
 
 data Organism = Organism {
@@ -43,24 +46,26 @@ make_matrix = matrix num_signals num_objects
 mapIndex :: (Int -> Int -> a -> b) -> Matrix a -> Matrix b
 mapIndex f m = matrix (nrows m) (ncols m) $ \(i,j) -> f i j (m ! (i,j))
 
+normalizeRows :: Fractional a => Matrix a -> Matrix a
+normalizeRows m = mapIndex normalizeRow m
+    where
+        normalizeRow i _ n = n / (sum . getRow i $ m)
+
+normalizeCols :: Fractional a => Matrix a -> Matrix a
+normalizeCols m = mapIndex normalizeCol m
+    where
+        normalizeCol _ j n = n / (sum . getCol j $ m)
+
 
 -- In the paper, this is denoted with P
 -- Probability of using signal j for object i
 send_matrix :: Organism -> Matrix Rational
-send_matrix organism = mapIndex normalizeRow a
-    where
-        a = association organism
-        normalizeRow :: Int -> Int -> Association -> Rational
-        normalizeRow i _ n = (assocToRational n) / (assocToRational . sum . getRow i $ a)
+send_matrix = normalizeRows . fmap assocToRational . association
 
 -- In the paper, this is denoted with Q
 -- Probability of interpreting signal j as refering to object i
 hear_matrix :: Organism -> Matrix Rational
-hear_matrix organism = mapIndex normalizeCol a
-    where
-        a = association organism
-        normalizeCol :: Int -> Int -> Association -> Rational
-        normalizeCol _ j n = (assocToRational n) / (assocToRational . sum . getCol j $ a)
+hear_matrix = normalizeCols . fmap assocToRational . association
 
 
 -- In the paper, this is denoted with F (Adapts equations 4 and 8)
