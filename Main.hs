@@ -54,7 +54,10 @@ comm_success i x y = sum success_array
 
 
 payoff_percent :: Fractional a => Organism -> Organism -> a
-payoff_percent = curry $ (flip (/)) maxPayoff . fromRational . uncurry payoff
+payoff_percent = curry $ normalize_payoff . uncurry payoff
+
+normalize_payoff :: Fractional a => Rational -> a
+normalize_payoff = (flip (/)) maxPayoff . fromRational
     where
         maxPayoff = realToFrac $ min num_signals num_objects
 
@@ -74,3 +77,16 @@ avg_payoff pop = sum payoffs / weight
 
         -- Total weight to divide by
         weight = realToFrac $ (length pop) * (length pop - 1)
+
+
+-- The average payoff for an organism within a population
+avg_payoff_org :: Population -> Int -> Rational
+avg_payoff_org pop i = sum payoffs / (realToFrac $ length pop - 1)
+    where
+        payoffs = [(payoff (pop !! i) (pop !! x)) | x <- indices , x /= i]
+        indices = [0 .. length pop - 1]
+
+
+avg_payoff_arr :: Population -> [Rational]
+avg_payoff_arr = fmap (avg_payoff_org pop) [0 .. length pop - 1]
+-- (flip fmap) [0 .. length pop - 1] . avg_payoff_org
