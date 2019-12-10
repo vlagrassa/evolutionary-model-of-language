@@ -130,6 +130,11 @@ comm_success i x y = sum success_array
         prob_hear k = hear_matrix y ! (i,k)
 
 
+payoff_percent :: Fractional a => Organism -> Organism -> a
+payoff_percent = curry $ (flip (/)) maxPayoff . fromRational . uncurry payoff
+    where
+        maxPayoff = realToFrac $ min num_signals num_objects
+
 
 -- The average payoff for a population
 avg_payoff :: Population -> Rational
