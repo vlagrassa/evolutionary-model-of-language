@@ -64,8 +64,8 @@ normalize_payoff = (flip (/)) maxPayoff . fromRational
 
 
 -- The average payoff for a population
-avg_payoff :: Population -> Rational
-avg_payoff pop = sum payoffs / weight
+avg_fitness :: Population -> Rational
+avg_fitness pop = sum payoffs / weight
     where
         -- List of all payoffs
         payoffs = fmap (uncurry payoff) organisms
@@ -81,15 +81,15 @@ avg_payoff pop = sum payoffs / weight
 
 
 -- The average payoff for an organism within a population
-avg_payoff_org :: Population -> Int -> Rational
-avg_payoff_org pop i = sum payoffs / (realToFrac $ length pop - 1)
+fitness :: Population -> Int -> Rational
+fitness pop i = sum payoffs / (realToFrac $ length pop - 1)
     where
         payoffs = [(payoff (pop !! i) (pop !! x)) | x <- indices , x /= i]
         indices = [0 .. length pop - 1]
 
 
-avg_payoff_arr :: Population -> [Rational]
-avg_payoff_arr pop = fmap (avg_payoff_org pop) [0 .. length pop - 1]
+fitness_arr :: Population -> [Rational]
+fitness_arr pop = fmap (fitness pop) [0 .. length pop - 1]
 -- (flip fmap) [0 .. length pop - 1] . avg_payoff_org
 
 
