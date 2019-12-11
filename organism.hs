@@ -141,15 +141,15 @@ make_child m org = Organism new_matrix (comm_payoff org)
         flip_to_yes seed = if seed < err_add then 1 else 0
 
 -- Generate a random child organism
-gen_child :: State (Organism, StdGen) Organism
-gen_child = do
-    (parent, gen) <- get
+gen_child :: Organism -> State StdGen Organism
+gen_child parent = do
+    gen <- get
     let (seed, gen') = runState rand_doubles_matrix gen
     let child = make_child seed parent
-    put (parent, gen')
+    put gen'
     return child
 
 -- Generate a list of n random children
-gen_children :: Int -> State (Organism, StdGen) [Organism]
-gen_children n = replicateM n gen_child
+gen_children :: Int -> Organism -> State StdGen [Organism]
+gen_children n parent = replicateM n (gen_child parent)
 
