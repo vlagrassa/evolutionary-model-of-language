@@ -3,6 +3,7 @@ module Organism where
 import Data.Matrix
 import System.Random
 import Vars
+import Utils
 
 
 type Association = Integer
