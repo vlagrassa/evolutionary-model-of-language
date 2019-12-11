@@ -63,23 +63,6 @@ normalize_payoff = (flip (/)) maxPayoff . fromRational
         maxPayoff = realToFrac $ min num_signals num_objects
 
 
--- The average payoff for a population
-avg_fitness :: Population -> Rational
-avg_fitness pop = sum payoffs / weight
-    where
-        -- List of all payoffs
-        payoffs = fmap (uncurry payoff) organisms
-
-        -- List of all permuations of two organisms
-        organisms = fmap (\(x,y) -> (pop !! x, pop !! y)) indices
-
-        -- List of all permutations of two indices in the population
-        indices = [(x,y) | x <- [0 .. length pop - 1], y <- [0 .. length pop - 1], x /= y]
-
-        -- Total weight to divide by
-        weight = realToFrac $ (length pop) * (length pop - 1)
-
-
 -- The average payoff for an organism within a population
 fitness :: Population -> Int -> Rational
 fitness pop i = sum payoffs / (realToFrac $ length pop - 1)
@@ -88,9 +71,17 @@ fitness pop i = sum payoffs / (realToFrac $ length pop - 1)
         indices = [0 .. length pop - 1]
 
 
+-- An array of the fitness of each organism in the population
 fitness_arr :: Population -> [Rational]
 fitness_arr pop = fmap (fitness pop) [0 .. length pop - 1]
 -- (flip fmap) [0 .. length pop - 1] . avg_payoff_org
+
+
+-- The average fitness of the population
+avg_fitness :: Population -> Rational
+avg_fitness pop = sum . fmap (flip (/) (toRational . length $ arr)) $ arr
+    where
+        arr = fitness_arr pop
 
 
 -- A list of all the unique association matrices in the population
