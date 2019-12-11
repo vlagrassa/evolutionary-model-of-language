@@ -19,6 +19,17 @@ num_objects :: Int
 num_objects = 5
 
 
+-- Probability of child forming new association
+-- In the paper, this is denoted with w_0
+-- 0.005
+err_add = 0.1
+
+-- Probability of child losing parent's association
+-- In the paper, this is denoted with w_1
+-- 0.0001
+err_rem = 0.1
+
+
 
 -- Matrix of similarities between different signals
 simil_matrix :: Matrix Double

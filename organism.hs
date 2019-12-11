@@ -2,6 +2,8 @@ module Organism where
 
 import Data.Matrix
 import System.Random
+import Control.Monad
+import Control.Monad.Trans.State
 import Vars
 import Utils
 
@@ -107,4 +109,47 @@ comm_success i x y = sum success_array
         -- Probability that listener will infer object "i" from signal "k"
         prob_hear k = hear_matrix y ! (i,k)
 
+
+-- Generate a random double and pass on the next state of the random generator
+random_double :: State StdGen Double
+random_double = do
+    gen <- get
+    let (d, new_gen) = randomR (0,1) gen
+    put new_gen
+    return d
+
+-- Generate a list of n random doubles
+random_doubles :: Int -> State StdGen [Double]
+random_doubles n = replicateM n random_double
+
+-- Generate a random matrix of doubles
+rand_doubles_matrix :: State StdGen (Matrix Double)
+rand_doubles_matrix = do
+    gen <- get
+    let (lis, gen') = runState (random_doubles (num_signals * num_objects)) gen
+    put gen'
+    return $ fromList num_signals num_objects $ lis
+
+
+-- Create a child from an organism and a seed matrix
+make_child :: Matrix Double -> Organism -> Organism
+make_child m org = Organism new_matrix (comm_payoff org)
+    where
+        new_matrix = AssociationMatrix $ zipMatrices flip_val m (getOrgMatrix org)
+        flip_val seed orig = if orig == 1 then flip_to_not seed else flip_to_yes seed
+        flip_to_not seed = if seed < err_rem then 0 else 1
+        flip_to_yes seed = if seed < err_add then 1 else 0
+
+-- Generate a random child organism
+gen_child :: State (Organism, StdGen) Organism
+gen_child = do
+    (parent, gen) <- get
+    let (seed, gen') = runState rand_doubles_matrix gen
+    let child = make_child seed parent
+    put (parent, gen')
+    return child
+
+-- Generate a list of n random children
+gen_children :: Int -> State (Organism, StdGen) [Organism]
+gen_children n = replicateM n gen_child
 
