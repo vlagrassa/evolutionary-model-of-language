@@ -11,16 +11,19 @@ data Vowel = Vowel {
     tense :: Bool,
 
     -- Whether or not the vowel is rounded
-    rounded :: Bool
+    rounded :: Bool,
+
+    char_v :: Char
 } deriving (Eq)
 
 instance Show Vowel where
-    show v = "[" ++ height_str ++ ", " ++ front_str ++ ", " ++ tense_str ++ ", " ++ round_str ++ "]"
+    show v = rep : " [" ++ height_str ++ ", " ++ front_str ++ ", " ++ tense_str ++ ", " ++ round_str ++ "]"
         where
             height_str = "height: " ++ (show . height $ v)
             front_str = "front: " ++ (show . frontness $ v)
             tense_str = if tense v then "+tense" else "-tense"
             round_str = if rounded v then "+round" else "-round"
+            rep = char_v v
 
 
 
@@ -31,12 +34,13 @@ data VoiceOnset = Voiced | Unvoiced | Aspirated | Ejective deriving (Eq, Show)
 data Consonant = Consonant {
     voice :: VoiceOnset,
     place :: PlaceOfArticulation,
-    manner :: MannerOfArticulation
+    manner :: MannerOfArticulation,
+    char_c :: Char
 } deriving (Eq)
 
 instance Show Consonant where
     show c = case c of
-        Consonant p m v -> "[" ++ (show v) ++ " " ++ (show p) ++ " " ++ (show m) ++ "]"
+        Consonant p m v c -> c : " [" ++ (show v) ++ " " ++ (show p) ++ " " ++ (show m) ++ "]"
 
 
 
@@ -95,13 +99,30 @@ instance Dist Consonant where
             manner_diff = manner c1 >~< manner c2
 
 
-v1 = Vowel 1 1 True False
-v2 = Vowel 1 0 True True
-v3 = Vowel 0 0 True True
-v4 = Vowel 0 1 False False
-v5 = Vowel 0.5 0.85 False False
+data Syllable = Syllable {
+    initial :: Consonant,
+    medial :: Vowel,
+    final :: Consonant
+} deriving (Eq)
 
-c_b = Consonant Voiced Labial Plosive
-c_p = Consonant Unvoiced Labial Plosive
-c_k' = Consonant Ejective Velar Plosive
-c_s = Consonant Unvoiced Coronal Fricative
+instance Show Syllable where
+    show s = case s of Syllable i m f -> char_c i : char_v m : char_c f : []
+
+instance Dist Syllable where
+    s1 >~< s2 = sum $ zipWith (*) [0.25, 0.5, 0.25] [ini_diff, med_diff, fin_diff]
+        where
+            ini_diff = initial s1 >~< initial s2
+            med_diff = medial s1 >~< medial s2
+            fin_diff = final s1 >~< final s2
+
+
+v1 = Vowel 1 1 True False 'i'
+v2 = Vowel 1 0 True True 'u'
+v3 = Vowel 0 0 True True 'o'
+v4 = Vowel 0 1 False False 'a'
+v5 = Vowel 0.5 0.85 False False 'e'
+
+c_b = Consonant Voiced Labial Plosive 'b'
+c_p = Consonant Unvoiced Labial Plosive 'p'
+c_k' = Consonant Ejective Velar Plosive  'k'
+c_s = Consonant Unvoiced Coronal Fricative 's'
