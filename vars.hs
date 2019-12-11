@@ -6,10 +6,12 @@ import Signals
 
 -- The number of signals
 -- In the paper, this is denoted with n
+num_signals :: Int
 num_signals = 5
 
 -- The number of messages
 -- In the paper, this is denoted with m
+num_objects :: Int
 num_objects = 5
 
 signals :: [Vowel]
