@@ -48,7 +48,7 @@ comm_success i x y = sum success_array
         prob_send j = send_matrix x ! (i,j)
 
         -- Probability that listener will hear signal "j" as signal "k"
-        prob_error j k = error_matrix ! (j,k)
+        prob_error j k = toRational $ error_matrix ! (j,k)
 
         -- Probability that listener will infer object "i" from signal "k"
         prob_hear k = hear_matrix y ! (i,k)
