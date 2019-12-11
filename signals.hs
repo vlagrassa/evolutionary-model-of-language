@@ -93,3 +93,15 @@ instance Dist Consonant where
             voice_diff = voice c1 >~< voice c2
             place_diff = place c1 >~< place c2
             manner_diff = manner c1 >~< manner c2
+
+
+v1 = Vowel 1 1 True False
+v2 = Vowel 1 0 True True
+v3 = Vowel 0 0 True True
+v4 = Vowel 0 1 False False
+v5 = Vowel 0.5 0.85 False False
+
+c_b = Consonant Voiced Labial Plosive
+c_p = Consonant Unvoiced Labial Plosive
+c_k' = Consonant Ejective Velar Plosive
+c_s = Consonant Unvoiced Coronal Fricative

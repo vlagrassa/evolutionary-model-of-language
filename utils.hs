@@ -6,12 +6,17 @@ import Data.Matrix
 mapIndex :: (Int -> Int -> a -> b) -> Matrix a -> Matrix b
 mapIndex f m = matrix (nrows m) (ncols m) $ \(i,j) -> f i j (m ! (i,j))
 
-normalizeRows :: Fractional a => Matrix a -> Matrix a
+normalizeRows :: RealFrac a => Matrix a -> Matrix a
 normalizeRows m = mapIndex normalizeRow m
     where
         normalizeRow i _ n = n / (sum . getRow i $ m)
 
-normalizeCols :: Fractional a => Matrix a -> Matrix a
+normalizeCols :: RealFrac a => Matrix a -> Matrix a
 normalizeCols m = mapIndex normalizeCol m
     where
         normalizeCol _ j n = n / (sum . getCol j $ m)
+
+
+-- Round a number f to the nth place
+roundN :: (RealFrac a1, Integral b, Fractional a2) => b -> a1 -> a2
+roundN n f = (fromInteger $ round $ f * (10^n)) / (10.0^^n)
