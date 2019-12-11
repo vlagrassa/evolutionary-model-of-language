@@ -4,18 +4,20 @@ import Data.Matrix
 import Utils
 import Signals
 
+-- The list of signals
+signals :: [Vowel]
+signals = [v1, v2, v3, v4, v5]
+
 -- The number of signals
 -- In the paper, this is denoted with n
 num_signals :: Int
-num_signals = 5
+num_signals = length signals
 
 -- The number of messages
 -- In the paper, this is denoted with m
 num_objects :: Int
 num_objects = 5
 
-signals :: [Vowel]
-signals = [v1, v2, v3, v4, v5]
 
 
 -- Matrix of similarities between different signals
