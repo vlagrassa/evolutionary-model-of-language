@@ -153,3 +153,12 @@ gen_child parent = do
 gen_children :: Int -> Organism -> State StdGen [Organism]
 gen_children n parent = replicateM n (gen_child parent)
 
+-- Generate a list of children based on some fitness
+gen_children_fit :: RealFrac a => a -> Organism -> State StdGen [Organism]
+gen_children_fit f parent = do
+    gen <- get
+    let max_children = reproduction_rate * (realToFrac f)
+    let (num_children, gen') = randomR (0, max_children+1) gen
+    let (children, gen'') = runState (gen_children (truncate num_children) parent) gen'
+    put gen''
+    return children

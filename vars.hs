@@ -30,6 +30,9 @@ err_add = 0.1
 err_rem = 0.1
 
 
+-- Maximum number of children the most fit organism can have
+reproduction_rate = 3
+
 
 -- Matrix of similarities between different signals
 simil_matrix :: Matrix Double
