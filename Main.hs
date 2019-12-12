@@ -41,7 +41,6 @@ fitness_n = normalize_f fitness
 -- An array of the fitness of each organism in the population
 fitness_arr :: Population -> [Rational]
 fitness_arr pop = fmap (fitness pop) [0 .. length pop - 1]
--- (flip fmap) [0 .. length pop - 1] . avg_payoff_org
 
 fitness_arr_n :: Fractional a => Population -> [a]
 fitness_arr_n = fmap norm_payoff . fitness_arr

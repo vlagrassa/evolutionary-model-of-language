@@ -44,6 +44,7 @@ instance Show Consonant where
 
 
 
+-- Data types with some notion of similarity / maximum distance between objects
 class Dist a where
     -- Difference operator: returns 0 if identical, 1 if as far as possible
     (>~<) :: a -> a -> Double
