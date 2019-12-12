@@ -60,7 +60,7 @@ instance Dist Bool where
 
 
 instance Dist Vowel where
-    v1 >~< v2 = sum . zipWith (*) [space_diff, round_diff, tense_diff] $ [0.6, 0.3, 0.1]
+    v1 >~< v2 = (sum . zipWith (*) [space_diff, round_diff, tense_diff] $ [0.6, 0.3, 0.1]) ** (1/3)
         where
             h = abs $ height v1 - height v2
             mod_height v = (height v / 2) + 0.5
@@ -93,7 +93,7 @@ instance Dist VoiceOnset where
     c1        >~< c2        = if c1 == c2 then 0 else c2 >~< c1
 
 instance Dist Consonant where
-    c1 >~< c2 = sum . zipWith (*) [voice_diff, place_diff, manner_diff] $ [0.3, 0.35, 0.35]
+    c1 >~< c2 = (sum . zipWith (*) [voice_diff, place_diff, manner_diff] $ [0.3, 0.35, 0.35]) ** (1/2)
         where
             voice_diff = voice c1 >~< voice c2
             place_diff = place c1 >~< place c2
