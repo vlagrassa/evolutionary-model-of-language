@@ -31,7 +31,7 @@ err_rem = 0.1
 
 
 -- Maximum number of children the most fit organism can have
-reproduction_rate = 3
+reproduction_rate = 3.0
 
 
 -- Matrix of similarities between different signals
