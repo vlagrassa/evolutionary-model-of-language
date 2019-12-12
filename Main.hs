@@ -56,6 +56,13 @@ avg_fitness_n :: Fractional a => Population -> a
 avg_fitness_n = norm_payoff . avg_fitness
 
 
+-- An array of the fitness of each organism in the population, curved by the highest fitness
+scaled_fitness_arr :: Population -> [Rational]
+scaled_fitness_arr pop = fmap (flip (/) max_value) $ fitness_arr pop
+    where
+        max_value = foldl1 max . fitness_arr $ pop
+
+
 
 -- A list of all the unique association matrices in the population
 association_list :: Population -> [AssociationMatrix]
@@ -85,7 +92,7 @@ create_next_generation pop = do
     put new_gen
     return children
     where
-        parents = zip pop (fitness_arr_n pop)
+        parents = zip pop (scaled_fitness_arr pop)
 
         fold_func (lis, g) (org, fit) = (lis ++ new_lis, g') where
             (new_lis, g') = runState (gen_children_fit fit org) g
