@@ -76,6 +76,15 @@ freq_association a pop = (num_matches a pop) / (realToFrac $ length pop)
         num_matches a = sum . fmap (\x -> if association x == a then 1 else 0)
 
 
+-- The average association matrix of a population
+avg_association :: Population -> Matrix Rational
+avg_association pop = fmap (flip (/) len) . foldl1 (zipMatrices (+)) $ lis
+    where
+        lis = fmap (fmap assocToRational . getMatrix) . association_list $ pop
+        len = toRational $ length lis
+
+
+
 
 data Generation = Generation {
     population :: Population,
