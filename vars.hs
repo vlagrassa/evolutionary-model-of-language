@@ -3,6 +3,7 @@ module Vars where
 import Data.Matrix
 import Utils
 import Signals
+import Objects
 
 -- The list of signals
 signals :: [Syllable]
@@ -13,10 +14,14 @@ signals = [syl_1, syl_2, syl_3, syl_4, syl_5]
 num_signals :: Int
 num_signals = length signals
 
+
+objects :: [Object]
+objects = [Object 1 1, Object 0.68 0.39, Object 0.83 0.9, Object 0.78 0.58, Object 0.91 1]
+
 -- The number of messages
 -- In the paper, this is denoted with m
 num_objects :: Int
-num_objects = 5
+num_objects = length objects
 
 
 -- Probability of child forming new association

@@ -6,6 +6,7 @@ import Control.Monad
 import Control.Monad.Trans.State
 import Vars
 import Utils
+import Objects
 
 
 type Association = Integer
@@ -28,29 +29,19 @@ fromList_a = AssociationMatrix . fromList num_signals num_objects
 
 
 
+-- An organism, represented by an association matrix between signals and objects
 data Organism = Organism {
 
     -- Association matrix of signals and objects
-    association :: AssociationMatrix,
+    association :: AssociationMatrix
 
-    -- Payoff for correct communication about some object
-    comm_payoff :: [Rational]
-}
-    deriving (Show, Eq)
+} deriving (Eq)
+
+instance Show Organism where
+    show o = "Organism:\n" ++ (show $ getOrgMatrix o) ++ "\n"
 
 
-instance Enum AssociationMatrix where
-    toEnum n = fromList_a . reverse . make_bin_list n $ num_signals * num_objects
-        where
-            -- Decompose input into list of 0s and 1s based on binary representation
-            make_bin_list _ (-1) = []
-            make_bin_list n index = if (n < 2 ^ index)
-                then 0 : make_bin_list n (index-1)
-                else 1 : make_bin_list (n - 2^index) (index-1)
 
-    fromEnum = fromInteger . fst . foldl parse_bin_list (0,0) . getMatrix
-        where
-            parse_bin_list (acc, ind) curr = (acc + curr * (2 ^ ind), ind+1)
 
 
 instance Bounded AssociationMatrix where
@@ -58,11 +49,11 @@ instance Bounded AssociationMatrix where
     maxBound = matrix_a $ \(i,j) -> 1
 
 
-instance Random AssociationMatrix where
-    randomR (a, b) g = 
-        case randomR (fromEnum a, fromEnum b) g of
-            (o, g') -> (toEnum o, g')
-    random g = randomR (minBound, maxBound) g
+-- instance Random AssociationMatrix where
+--     randomR (a, b) g =
+--         case randomR (fromEnum a, fromEnum b) g of
+--             (o, g') -> (toEnum o, g')
+--     random g = randomR (minBound, maxBound) g
 
 
 getOrgMatrix :: Organism -> Matrix Association
@@ -81,13 +72,13 @@ hear_matrix = normalizeCols . fmap assocToRational . getOrgMatrix
 -- In the paper, this is denoted with F (Adapts equations 4 and 8)
 -- The average payoff of either organism succesfully communicating an arbitrary message to the other
 payoff :: Organism -> Organism -> Rational
-payoff a b = ((total_payoff a b) + (total_payoff b a)) / 2
+payoff a b = toRational $ ((total_payoff a b) + (total_payoff b a)) / 2
     where
         -- Total payoff for X succesfully communicating with Y
-        total_payoff x y = sum [success_payoff i x y | i <- [1..num_objects]]
+        total_payoff x y = sum [(freq $ objects !! (i-1)) * success_payoff i x y | i <- [1..num_objects]]
 
         -- Payoff for X succesfully communicating "i" to Y
-        success_payoff i x y = (comm_payoff x !! (i-1)) * (comm_success i x y)
+        success_payoff i x y = (id_payoff $ objects !! (i-1)) * (fromRational $ comm_success i x y)
 
 
 -- Probability of X succesfully communicating "i" to Y
@@ -133,7 +124,7 @@ rand_doubles_matrix = do
 
 -- Create a child from an organism and a seed matrix
 make_child :: Matrix Double -> Organism -> Organism
-make_child m org = Organism new_matrix (comm_payoff org)
+make_child m org = Organism new_matrix
     where
         new_matrix = AssociationMatrix $ zipMatrices flip_val m (getOrgMatrix org)
         flip_val seed orig = if orig == 1 then flip_to_not seed else flip_to_yes seed
