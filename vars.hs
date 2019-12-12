@@ -34,6 +34,11 @@ err_rem = 0.1
 reproduction_rate = 3.0
 
 
+-- Maximum size of the population that can be supported
+carrying_capacity :: Int
+carrying_capacity = 30
+
+
 -- Matrix of similarities between different signals
 simil_matrix :: Matrix Double
 simil_matrix = matrix num_signals num_signals $

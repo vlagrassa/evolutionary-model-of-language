@@ -3,6 +3,7 @@ import Data.Matrix
 import System.Random
 import Data.List
 import Control.Monad.Trans.State
+import Control.Monad
 
 import Organism
 import Vars
@@ -99,9 +100,9 @@ create_next_generation pop = do
     gen <- get
     let (children, new_gen) = foldl fold_func ([], gen) parents
     put new_gen
-    return children
+    return $ take carrying_capacity children
     where
-        parents = zip pop (scaled_fitness_arr pop)
+        parents = sortBy (\(_,a) (_,b) -> compare b a) $ zip pop (scaled_fitness_arr pop)
 
         fold_func (lis, g) (org, fit) = (lis ++ new_lis, g') where
             (new_lis, g') = runState (gen_children_fit fit org) g
@@ -111,7 +112,17 @@ create_next_generation pop = do
 next_generation :: State Generation Rational
 next_generation = do
     Generation pop gen <- get
-    let fit = fitness_arr pop
-    let (children, new_gen) = runState (create_next_generation pop) gen
-    put $ Generation children new_gen
-    return (avg_fitness children)
+    if length pop == 0
+        then do
+            put $ Generation pop gen
+            return 0
+        else do
+            let fit = fitness_arr pop
+            let (children, new_gen) = runState (create_next_generation pop) gen
+            put $ Generation children new_gen
+            return $ avg_fitness_n children
+
+
+run_n_generations :: Int -> State Generation [Rational]
+run_n_generations n = replicateM n next_generation
+
