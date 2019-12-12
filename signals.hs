@@ -127,3 +127,13 @@ c_b = Consonant Voiced Labial Plosive 'b'
 c_p = Consonant Unvoiced Labial Plosive 'p'
 c_k' = Consonant Ejective Velar Plosive  'k'
 c_s = Consonant Unvoiced Coronal Fricative 's'
+c_t = Consonant Unvoiced Coronal Plosive 't'
+c_h = Consonant Unvoiced Glottal Fricative 'h'
+c_m = Consonant Voiced Labial Nasal 'm'
+c_n = Consonant Voiced Coronal Nasal 'n'
+
+syl_1 = Syllable c_k' v1 c_t
+syl_2 = Syllable c_s  v2 c_p
+syl_3 = Syllable c_s  v3 c_b
+syl_4 = Syllable c_h  v4 c_s
+syl_5 = Syllable c_m  v5 c_n

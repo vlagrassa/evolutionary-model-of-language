@@ -5,8 +5,8 @@ import Utils
 import Signals
 
 -- The list of signals
-signals :: [Vowel]
-signals = [v1, v2, v3, v4, v5]
+signals :: [Syllable]
+signals = [syl_1, syl_2, syl_3, syl_4, syl_5]
 
 -- The number of signals
 -- In the paper, this is denoted with n
