@@ -70,6 +70,6 @@ scaled_fitness_arr pop = fmap (flip (/) max_value) $ fitness_arr pop
 
 -- Get the most fit organism from a population
 fittest :: Population -> (Organism, Rational)
-fittest pop = foldl1 max_fitness $ zip pop (scaled_fitness_arr pop)
+fittest pop = foldl1 max_fitness $ zip pop (fitness_arr_n pop)
     where
         max_fitness (a1, a2) (b1, b2) = if a2 > b2 then (a1,a2) else (b1,b2)
