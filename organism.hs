@@ -114,13 +114,14 @@ random_double = do
 random_doubles :: Int -> State StdGen [Double]
 random_doubles n = replicateM n random_double
 
--- Generate a random matrix of doubles
-rand_doubles_matrix :: State StdGen (Matrix Double)
-rand_doubles_matrix = do
+-- Generate a random matrix of doubles, adjusted by the corresponding fitness matrix
+adj_doubles_matrix :: RealFrac a => Matrix a -> State StdGen (Matrix Double)
+adj_doubles_matrix m = do
     gen <- get
     let (lis, gen') = runState (random_doubles (num_signals * num_objects)) gen
+    let mat = fromList num_signals num_objects lis
     put gen'
-    return $ fromList num_signals num_objects $ lis
+    return $ zipMatrices (\x fit -> x / (1-fit)) mat (fmap realToFrac m)
 
 
 -- Create a child from an organism and a seed matrix
@@ -133,24 +134,24 @@ make_child m org = Organism new_matrix
         flip_to_yes seed = if seed < err_add then 1 else 0
 
 -- Generate a random child organism
-gen_child :: Organism -> State StdGen Organism
-gen_child parent = do
+gen_child :: RealFrac a => Matrix a -> Organism -> State StdGen Organism
+gen_child m parent = do
     gen <- get
-    let (seed, gen') = runState rand_doubles_matrix gen
+    let (seed, gen') = runState (adj_doubles_matrix m) gen
     let child = make_child seed parent
     put gen'
     return child
 
 -- Generate a list of n random children
-gen_children :: Int -> Organism -> State StdGen [Organism]
-gen_children n parent = replicateM n (gen_child parent)
+gen_children :: RealFrac a => Matrix a -> Int -> Organism -> State StdGen [Organism]
+gen_children m n parent = replicateM n (gen_child m parent)
 
 -- Generate a list of children based on some fitness
-gen_children_fit :: RealFrac a => a -> Organism -> State StdGen [Organism]
-gen_children_fit f parent = do
+gen_children_fit :: RealFrac a => Matrix a -> a -> Organism -> State StdGen [Organism]
+gen_children_fit m f parent = do
     gen <- get
     let max_children = reproduction_rate * (realToFrac f)
     let (num_children, gen') = randomR (0, max_children+1) gen
-    let (children, gen'') = runState (gen_children (truncate num_children) parent) gen'
+    let (children, gen'') = runState (gen_children m (truncate num_children) parent) gen'
     put gen''
     return children

@@ -18,11 +18,22 @@ normalizeCols m = mapIndex normalizeCol m
         normalizeCol _ j n = if total j == 0 then 0 else n / (total j)
         total j = sum . getCol j $ m
 
+normalizeRowsCols :: RealFrac a => Matrix a -> Matrix a
+normalizeRowsCols m = mapIndex normalizeRowCol m
+    where
+        normalizeRowCol i j n = if total i j == 0 then 0 else n / (total i j)
+        total i j = (sum . getRow i $ m) + (sum . getCol j $ m) - (m ! (i,j))
+
 zipMatrices :: (a -> b -> c) -> Matrix a -> Matrix b -> Matrix c
 zipMatrices f a b = matrix num_rows num_cols $ \(i,j) -> f (a ! (i,j)) (b !(i,j))
     where
         num_rows = min (nrows a) (nrows b)
         num_cols = min (ncols a) (ncols b)
+
+avgMatrix :: [Matrix Rational] -> Matrix Rational
+avgMatrix list = fmap (flip (/) len) . foldl1 (zipMatrices (+)) $ list
+    where
+        len = toRational $ length list
 
 
 -- Round a number f to the nth place

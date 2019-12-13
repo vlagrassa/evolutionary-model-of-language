@@ -27,3 +27,6 @@ instance Random Object where
 
     random = randomR (Object 0 0, Object 1 1)
 
+
+total_payoff :: Object -> Double
+total_payoff obj = freq obj * id_payoff obj

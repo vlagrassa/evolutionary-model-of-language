@@ -8,6 +8,7 @@ import Control.Monad
 import Organism
 import Vars
 import Utils
+import Objects
 
 
 type Population = [Organism]
@@ -85,6 +86,23 @@ avg_association pop = fmap (flip (/) len) . foldl1 (zipMatrices (+)) $ lis
         len = toRational $ length lis
 
 
+-- A metric of fitness for each possible association the organism can have
+-- For some association between signal i and object j, this is the likelihood that
+-- the signal i will be interpreted by the population as some object j, times the
+-- total payoff for identifying j
+assoc_fitness :: Population -> Matrix Rational
+assoc_fitness pop = zipMatrices (*) (avg_association pop) payoff_matrix
+    where
+        -- The likelihood that i will be interpreted as j, times the payoff for identifying j, times the frequency of j
+        payoff_matrix = fmap toRational $ matrix num_signals num_objects payoff_matrix_f
+
+        -- Function to construct the above matrix
+        payoff_matrix_f (i,j) = (total_payoff $ objects !! (j-1)) * (avg_understand_matrix ! (i,j))
+
+        -- The average likelihood that i will be heard as referring to j across the population
+        avg_understand_matrix = zipMatrices (*) error_matrix . fmap realToFrac . avgMatrix $ fmap hear_matrix pop
+
+
 
 
 data Generation = Generation {
@@ -104,8 +122,10 @@ create_next_generation pop = do
     where
         parents = sortBy (\(_,a) (_,b) -> compare b a) $ zip pop (scaled_fitness_arr pop)
 
+        assoc = assoc_fitness pop
+
         fold_func (lis, g) (org, fit) = (lis ++ new_lis, g') where
-            (new_lis, g') = runState (gen_children_fit fit org) g
+            (new_lis, g') = runState (gen_children_fit assoc fit org) g
 
 
 -- Function to move to the next generation
