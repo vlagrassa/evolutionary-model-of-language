@@ -68,17 +68,6 @@ send_matrix = normalizeRows . fmap assocToRational . getOrgMatrix
 hear_matrix :: Organism -> Matrix Rational
 hear_matrix = normalizeCols . fmap assocToRational . getOrgMatrix
 
--- In the paper, this is denoted with F (Adapts equations 4 and 8)
--- The average payoff of either organism succesfully communicating an arbitrary message to the other
-payoff :: Organism -> Organism -> Rational
-payoff a b = toRational $ ((total_payoff a b) + (total_payoff b a)) / 2
-    where
-        -- Total payoff for X succesfully communicating with Y
-        total_payoff x y = sum [(freq $ objects !! (i-1)) * success_payoff i x y | i <- [1..num_objects]]
-
-        -- Payoff for X succesfully communicating "i" to Y
-        success_payoff i x y = (id_payoff $ objects !! (i-1)) * (fromRational $ comm_success i x y)
-
 
 -- Probability of organism X succesfully communicating "i" to organism Y
 -- This consists of three parts:
@@ -102,6 +91,19 @@ comm_success i x y = sum success_array
 
         -- Probability that listener will infer object "i" from signal "k"
         prob_hear k = hear_matrix y ! (i,k)
+
+
+-- In the paper, this is denoted with F (Adapts equations 4 and 8)
+-- The average payoff of either organism succesfully communicating an arbitrary message to the other
+payoff :: Organism -> Organism -> Rational
+payoff a b = toRational $ ((total_payoff a b) + (total_payoff b a)) / 2
+    where
+        -- Total payoff for X succesfully communicating with Y
+        total_payoff x y = sum [(freq $ objects !! (i-1)) * success_payoff i x y | i <- [1..num_objects]]
+
+        -- Payoff for X succesfully communicating "i" to Y
+        success_payoff i x y = (id_payoff $ objects !! (i-1)) * (fromRational $ comm_success i x y)
+
 
 
 -- Generate a random double and pass on the next state of the random generator
