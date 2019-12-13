@@ -8,12 +8,12 @@ import Utils
 import Objects
 
 
--- type Association = Integer
-type Association = Rational
+type Association = Integer
+-- type Association = Rational
 
 assocToRational :: Association -> Rational
-assocToRational = id
--- assocToRational = realToFrac
+-- assocToRational = id
+assocToRational = realToFrac
 assocToFractional  = fromRational . assocToRational
 
 
