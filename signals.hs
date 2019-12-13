@@ -110,7 +110,7 @@ instance Show Syllable where
     show s = case s of Syllable i m f -> char_c i : char_v m : char_c f : []
 
 instance Dist Syllable where
-    s1 >~< s2 = sum $ zipWith (*) [0.25, 0.5, 0.25] [ini_diff, med_diff, fin_diff]
+    s1 >~< s2 = (sum $ zipWith (*) [0.25, 0.5, 0.25] [ini_diff, med_diff, fin_diff]) ** (1/4)
         where
             ini_diff = initial s1 >~< initial s2
             med_diff = medial s1 >~< medial s2
