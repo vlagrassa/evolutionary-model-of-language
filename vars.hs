@@ -27,12 +27,12 @@ num_objects = length objects
 -- Probability of child forming new association
 -- In the paper, this is denoted with w_0
 -- 0.005
-err_add = 0.1
+err_add = 0.01
 
 -- Probability of child losing parent's association
 -- In the paper, this is denoted with w_1
 -- 0.0001
-err_rem = 0.1
+err_rem = 0.0005
 
 
 -- Maximum number of children the most fit organism can have
