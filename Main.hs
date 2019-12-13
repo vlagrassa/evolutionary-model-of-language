@@ -72,15 +72,14 @@ next_generation = do
     Generation idx pop gen <- get
     if length pop == 0
         then do
-            put $ Generation (idx+1) pop gen
+            put $ Generation (idx) pop gen
             return $ BlankGeneration (idx+1) -- summarize_gen (idx+1) pop
         else do
             let fit = fitness_arr pop
             let (children, new_gen) = runState (create_next_generation pop) gen
             put $ Generation (idx+1) children new_gen
-            return $ summarize_gen (idx+1) pop
+            return $ summarize_gen (idx) pop
 
 
 run_n_generations :: Int -> State Generation [GenSummary]
 run_n_generations n = replicateM n next_generation
-
