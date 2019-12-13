@@ -4,6 +4,7 @@ import Data.Matrix
 import System.Random
 import Control.Monad
 import Control.Monad.Trans.State
+import Data.List
 import Vars
 import Utils
 import Objects
@@ -93,16 +94,46 @@ comm_success i x y = sum success_array
         prob_hear k = hear_matrix y ! (i,k)
 
 
--- In the paper, this is denoted with F (Adapts equations 4 and 8)
--- The average payoff of either organism succesfully communicating an arbitrary message to the other
-payoff :: Organism -> Organism -> Rational
-payoff a b = toRational $ ((total_payoff a b) + (total_payoff b a)) / 2
-    where
-        -- Total payoff for X succesfully communicating with Y
-        total_payoff x y = sum [(freq $ objects !! (i-1)) * success_payoff i x y | i <- [1..num_objects]]
 
-        -- Payoff for X succesfully communicating "i" to Y
-        success_payoff i x y = (id_payoff $ objects !! (i-1)) * (fromRational $ comm_success i x y)
+-- A population of organisms
+type Population = [Organism]
+
+-- A list of all the unique association matrices in the population
+association_list :: Population -> [AssociationMatrix]
+association_list = nub . fmap association
+
+
+-- Frequency of individuals with a given association matrix in a given population
+freq_association :: AssociationMatrix -> Population -> Rational
+freq_association a pop = (num_matches a pop) / (realToFrac $ length pop)
+    where
+        num_matches a = sum . fmap (\x -> if association x == a then 1 else 0)
+
+
+-- The average association matrix of a population
+avg_association :: Population -> Matrix Rational
+avg_association pop = fmap (flip (/) len) . foldl1 (zipMatrices (+)) $ lis
+    where
+        lis = fmap (fmap assocToRational . getMatrix) . association_list $ pop
+        len = toRational $ length lis
+
+
+-- A metric of fitness for each possible association the organism can have
+-- For some association between signal i and object j, this is the likelihood that
+-- the signal i will be interpreted by the population as some object j, times the
+-- total payoff for identifying j
+assoc_fitness :: Population -> Matrix Rational
+assoc_fitness pop = zipMatrices (*) (avg_association pop) payoff_matrix
+    where
+        -- The likelihood that i will be interpreted as j, times the payoff for identifying j, times the frequency of j
+        payoff_matrix = fmap toRational $ matrix num_signals num_objects payoff_matrix_f
+
+        -- Function to construct the above matrix
+        payoff_matrix_f (i,j) = (total_payoff $ objects !! (j-1)) * (avg_understand_matrix ! (i,j))
+
+        -- The average likelihood that i will be heard as referring to j across the population
+        avg_understand_matrix = zipMatrices (*) error_matrix . fmap realToFrac . avgMatrix $ fmap hear_matrix pop
+
 
 
 
