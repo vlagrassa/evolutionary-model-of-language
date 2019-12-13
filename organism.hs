@@ -19,36 +19,22 @@ assocToFractional  = fromRational . assocToRational
 
 
 
+-- A matrix of associations between signals and objects
 newtype AssociationMatrix = AssociationMatrix { getMatrix :: Matrix Association }
     deriving (Show, Eq)
 
+-- Helper function to construct an association matrix from a function of the row and column
 matrix_a :: ((Int, Int) -> Association) -> AssociationMatrix
 matrix_a = AssociationMatrix . matrix num_signals num_objects
 
+-- Helper function to construct an association matrix from a list of values
 fromList_a :: [Association] -> AssociationMatrix
 fromList_a = AssociationMatrix . fromList num_signals num_objects
 
-
-
--- An organism, represented by an association matrix between signals and objects
-data Organism = Organism {
-
-    -- Association matrix of signals and objects
-    association :: AssociationMatrix
-
-} deriving (Eq)
-
-instance Show Organism where
-    show o = "Organism:\n" ++ (show $ getOrgMatrix o) ++ "\n"
-
-
-
-
-
+-- Upper and lower bounds of an association matrix are all 0s and all 1s
 instance Bounded AssociationMatrix where
     minBound = matrix_a $ \(i,j) -> 0
     maxBound = matrix_a $ \(i,j) -> 1
-
 
 -- instance Random AssociationMatrix where
 --     randomR (a, b) g =
@@ -57,16 +43,28 @@ instance Bounded AssociationMatrix where
 --     random g = randomR (minBound, maxBound) g
 
 
+
+
+-- An organism, represented by an association matrix between signals and objects
+data Organism = Organism {
+    association :: AssociationMatrix
+} deriving (Eq)
+
+-- Method to print an organism
+instance Show Organism where
+    show o = "Organism:\n" ++ (show $ getOrgMatrix o) ++ "\n"
+
+-- Helper function to get the association matrix of an organism
 getOrgMatrix :: Organism -> Matrix Association
 getOrgMatrix = getMatrix . association
 
 -- In the paper, this is denoted with P
--- Probability of using signal j for object i
+-- Probability that the given organism will use signal j for object i
 send_matrix :: Organism -> Matrix Rational
 send_matrix = normalizeRows . fmap assocToRational . getOrgMatrix
 
 -- In the paper, this is denoted with Q
--- Probability of interpreting signal j as refering to object i
+-- Probability that the given organism will interpreting signal j as refering to object i
 hear_matrix :: Organism -> Matrix Rational
 hear_matrix = normalizeCols . fmap assocToRational . getOrgMatrix
 
@@ -82,7 +80,11 @@ payoff a b = toRational $ ((total_payoff a b) + (total_payoff b a)) / 2
         success_payoff i x y = (id_payoff $ objects !! (i-1)) * (fromRational $ comm_success i x y)
 
 
--- Probability of X succesfully communicating "i" to Y
+-- Probability of organism X succesfully communicating "i" to organism Y
+-- This consists of three parts:
+--      The probability that X will use some signal j to refer to the object i
+--      The probability that Y will hear signal j as signal k (based on similarity of signals)
+--      The probability that Y will interpret signal k to mean the object i
 comm_success :: Int -> Organism -> Organism -> Rational
 comm_success i x y = sum success_array
     where
